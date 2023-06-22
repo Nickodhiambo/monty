@@ -20,9 +20,9 @@
  */
 typedef struct stack_s
 {
-	int n;
-	struct stack_s *prev;
-	struct stack_s *next;
+        int n;
+        struct stack_s *prev;
+        struct stack_s *next;
 } stack_t;
 
 /**
@@ -35,11 +35,6 @@ typedef struct stack_s
  */
 typedef struct instruction_s
 {
-<<<<<<< HEAD
-	char *opcode;
-	void (*f)(stack_t **stack, unsigned int line_number);
-} instruction_t
-=======
         char *opcode;
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
@@ -62,5 +57,4 @@ void add(stack_t **stack, unsigned int line_number);
 void nop(stack_t **stack, unsigned int line_number);
 
 
->>>>>>> 2cd6be14723268e9dea82c13a9137c75c7f3778f
 #endif
