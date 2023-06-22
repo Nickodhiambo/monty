@@ -1,10 +1,13 @@
 #ifndef MONTY_H
 #define MONTY_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+#define MAX_LINE_LEN 1024
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -32,7 +35,32 @@ typedef struct stack_s
  */
 typedef struct instruction_s
 {
+<<<<<<< HEAD
 	char *opcode;
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t
+=======
+        char *opcode;
+        void (*f)(stack_t **stack, unsigned int line_number);
+} instruction_t;
+
+/** functions in handle_files.c file */
+void free_stack(stack_t *stack);
+void process_monty_file(const char *file_name);
+
+/** function in execute_instructions.c file */
+void execute_instructions(char *opcode, unsigned int line_number,
+			  stack_t **stack);
+
+/** opcode functions */
+void push(stack_t **stack, unsigned int line_number);
+void pall(stack_t **stack, unsigned int line_number);
+void pint(stack_t **stack, unsigned int line_number);
+void pop(stack_t **stack, unsigned int line_number);
+void swap(stack_t **stack, unsigned int line_number);
+void add(stack_t **stack, unsigned int line_number);
+void nop(stack_t **stack, unsigned int line_number);
+
+
+>>>>>>> 2cd6be14723268e9dea82c13a9137c75c7f3778f
 #endif
