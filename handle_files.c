@@ -1,79 +1,54 @@
 #include "monty.h"
 
+
 /**
- * open_monty_file - Opens a file
- * @file_name: File to be opened
- * Return: Pointer to opened file
+ * process_monty_file - Opens and reads contents of a file
+ * @file_name: Takes monty file as input
+ * Return: A data_t structure containing file lines
  */
-
-FILE *open_monty_file(const char *file_name)
+void process_monty_file(const char *file_name)
 {
-	FILE *file = fopen(file_name, "r");
+	FILE *file;
+	char line[100];
+	unsigned int line_number = 0;
+	stack_t *stack = NULL;
+	char *opcode;
 
-	if (file_name == NULL)
+	file = fopen(file_name, "r");
+	if (!file)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", file_name);
 		exit(EXIT_FAILURE);
 	}
-	return (file);
-}
 
-/**
- * read_monty_file - Reads a file
- * @file_name: Monty file to be read
- * Return: data_t structure with lines of code
- */
-
-data_t read_monty_file(const char *file_name)
-{
-	FILE *file = open_monty_file(file_name);
-	data_t file_contents;
-	char line[MAX_LINE_LEN];
-	int len;
-
-	file_contents.lines = malloc(sizeof(char *) * MAX_LINE_LEN);
-
-	if (file_contents.lines == NULL)
+	while (fgets(line, sizeof(line), file))
 	{
-		fclose(file);
-		fprintf(stderr, "Error: malloc failed\n");
-		exit(EXIT_FAILURE);
-	}
+		line_number++;
+		opcode = strtok(line, " \n");
 
-	file_contents.count = 0;
-	while (fgets(line, MAX_LINE_LEN, file) != NULL)
-	{
-		len = strlen(line);
-		if (line[len - 1] != '\n')
-			line[len - 1] = '\0';
-		file_contents.lines[file_contents.count] = malloc(sizeof(char) *
-				(len + 1));
-		if (file_contents.lines[file_contents.count] == NULL)
+		if (opcode && opcode[0] != '#')
 		{
-			fclose(file);
-			fprintf(stderr, "Error: malloc failed\n");
-			exit(EXIT_FAILURE);
+			execute_instructions(opcode, line_number, &stack);
 		}
-		strcpy(file_contents.lines[file_contents.count], line);
-		file_contents.count++;
 	}
+
 	fclose(file);
-	return (file_contents);
+	free_stack(stack);
 }
 
 /**
- * free_data_t - Frees memory allocated to data structure data_t
- * @file_contents: Lines in a monty file
- * Return: Nothing
+ * free_stack - frees memory allocated for a stack_t structure
+ * @stack: The structure to be freed
  */
-
-void free_data_t(data_t file_contents)
+void free_stack(stack_t *stack)
 {
-	int i;
+	stack_t *temp = stack;
+	stack_t *next;
 
-	for (i = 0; i < file_contents.count; i++)
+	while (temp)
 	{
-		free(file_contents.lines[i]);
+		next = temp->next;
+		free(temp);
+		temp = next;
 	}
-	free(file_contents.lines);
 }

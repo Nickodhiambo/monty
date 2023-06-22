@@ -10,19 +10,6 @@
 #define MAX_LINE_LEN 1024
 
 /**
- * struct data_s - Contains file lines and their count
- * @lines:Lines of text in a file
- * @count:  number of lines in the file
- *
- * Description: Stores the content of a file
- */
-typedef struct data_s
-{
-	char **lines;
-	int count;
-} data_t;
-
-/**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
  * @prev: points to the previous element of the stack (or queue)
@@ -53,18 +40,21 @@ typedef struct instruction_s
 } instruction_t;
 
 /** functions in handle_files.c file */
-
-void free_data_t(data_t file_contents);
-data_t read_monty_file(const char *file_name);
+void free_stack(stack_t *stack);
+void process_monty_file(const char *file_name);
 
 /** function in execute_instructions.c file */
-void find_instruction(char *opcode, stack_t **stack,
-		      unsigned int line_number, char *argument);
-void execute_instructions(data_t file_contents);
+void execute_instructions(char *opcode, unsigned int line_number,
+			  stack_t **stack);
 
-/** function in push_pall.c */
-void push(stack_t **stack, unsigned int line_number, char *argument);
-void pall(stack_t **stack, unsigned int line_number, char *argument);
+/** opcode functions */
+void push(stack_t **stack, unsigned int line_number);
+void pall(stack_t **stack, unsigned int line_number);
+void pint(stack_t **stack, unsigned int line_number);
+void pop(stack_t **stack, unsigned int line_number);
+void swap(stack_t **stack, unsigned int line_number);
+void add(stack_t **stack, unsigned int line_number);
+void nop(stack_t **stack, unsigned int line_number);
 
 
 #endif

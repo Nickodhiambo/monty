@@ -1,65 +1,41 @@
 #include "monty.h"
 
 /**
- * find_instruction - Finds instruction function to execute
- * @opcode: The opcode string
- * @stack: A pointer to a stack of instructions
- * @line_number: The current line number
- * @argument: instruction argument
+ * execute_instructions - executes lines of a monty file sequentially
+ * @opcode: opcode
+ * @line_number: Position of a line in file, starting from 1
+ * @stack: poniter to the top line
  */
-void find_instruction(char *opcode, stack_t **stack,
-		      unsigned int line_number, char *argument)
+void execute_instructions(char *opcode, unsigned int line_number,
+			  stack_t **stack)
 {
-	int n = 0;
+	int _opcode = 0;
+	size_t n;
+
 	instruction_t instructions[] = {
 		{"push", push},
 		{"pall", pall},
-		{NULL, NULL}
-	};
+		{"pint", pint},
+		{"pop", pop},
+		{"swap", swap},
+		{"add", add},
+		{"nop", nop},
+		{NULL, NULL}};
 
-	(void) argument;
-	while (instructions[n].opcode != NULL)
+	for (n = 0; instructions[n].opcode != NULL; n++)
 	{
 		if (strcmp(opcode, instructions[n].opcode) == 0)
 		{
+			_opcode = 1;
 			instructions[n].f(stack, line_number);
-			return;
+			break;
 		}
-		n++;
 	}
 
-	fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-	exit(EXIT_FAILURE);
-}
-
-/**
- * execute_instructions - executes lines of a monty file
- * @file_content: component of data_t structure
- */
-void execute_instructions(data_t file_contents)
-{
-	stack_t *stack = NULL;
-	stack_t *temp;
-	int n;
-
-	char *line, *opcode, *argument;
-
-	for (n = 0; n < file_contents.count; n++)
+	if (!_opcode)
 	{
-		line = file_contents.lines[n];
-		opcode = strtok(line, " \t\n");
-		if (opcode == NULL || opcode[0] == '#')
-			continue;
-
-		argument = strtok(NULL, "\t\n");
-
-		find_instruction(opcode, &stack, n + 1, argument);
-	}
-
-	while (stack != NULL)
-	{
-		temp = stack->prev;
-		free(stack);
-		stack = temp;
+		fprintf(stderr, "L%u: unknown instruction %s\n", line_number,
+			opcode);
+		exit(EXIT_FAILURE);
 	}
 }
