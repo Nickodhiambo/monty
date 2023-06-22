@@ -1,10 +1,26 @@
 #ifndef MONTY_H
 #define MONTY_H
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+#define MAX_LINE_LEN 1024
+
+/**
+ * struct data_s - Contains file lines and their count
+ * @lines:Lines of text in a file
+ * @count:  number of lines in the file
+ *
+ * Description: Stores the content of a file
+ */
+typedef struct data_s
+{
+	char **lines;
+	int count;
+} data_t;
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -34,6 +50,21 @@ typedef struct instruction_s
 {
         char *opcode;
         void (*f)(stack_t **stack, unsigned int line_number);
-} instruction_t
+} instruction_t;
+
+/** functions in handle_files.c file */
+
+void free_data_t(data_t file_contents);
+data_t read_monty_file(const char *file_name);
+
+/** function in execute_instructions.c file */
+void find_instruction(char *opcode, stack_t **stack,
+		      unsigned int line_number, char *argument);
+void execute_instructions(data_t file_contents);
+
+/** function in push_pall.c */
+void push(stack_t **stack, unsigned int line_number, char *argument);
+void pall(stack_t **stack, unsigned int line_number, char *argument);
+
 
 #endif
