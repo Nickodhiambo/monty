@@ -20,6 +20,14 @@ void execute_instructions(char *opcode, unsigned int line_number,
 		{"swap", swap},
 		{"add", add},
 		{"nop", nop},
+		{"sub", sub},
+		{"div", divd},
+		{"mul", mul},
+		{"mod", mod},
+		{"pchar", pchar},
+		{"pstr", pstr},
+		{"rotl", rotl},
+		{"rotr", rotr},
 		{NULL, NULL}};
 
 	for (n = 0; instructions[n].opcode != NULL; n++)
